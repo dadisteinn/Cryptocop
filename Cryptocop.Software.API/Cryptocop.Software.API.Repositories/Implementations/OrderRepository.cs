@@ -51,7 +51,7 @@ namespace Cryptocop.Software.API.Repositories.Implementations
                 .Select(o => new OrderItemDto
                 {
                   Id = o.Id,
-                  ProductIdentifier = o.ProducrIdentifier,
+                  ProductIdentifier = o.ProductIdentifier,
                   Quantity = o.Quantity,
                   UnitPrice = o.UnitPrice,
                   TotalPrice = o.TotalPrice
@@ -100,7 +100,7 @@ namespace Cryptocop.Software.API.Repositories.Implementations
                 .Select(i => new OrderItem
                 {
                   Id = i.Id,
-                  ProducrIdentifier = i.ProductIdentifier,
+                  ProductIdentifier = i.ProductIdentifier,
                   Quantity = i.Quantity,
                   UnitPrice = i.UnitPrice,
                   TotalPrice = i.Quantity * i.UnitPrice
