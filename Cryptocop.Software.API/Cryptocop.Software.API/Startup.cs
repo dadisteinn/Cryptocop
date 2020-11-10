@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Cryptocop.Software.API.Extensions;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 namespace Cryptocop.Software.API
 {
@@ -78,6 +79,11 @@ namespace Cryptocop.Software.API
       services.AddTransient<IShoppingCartRepository, ShoppingCartRepository>();
       services.AddTransient<ITokenRepository, TokenRepository>();
       services.AddTransient<IUserRepository, UserRepository>();
+
+      services.Configure<KestrelServerOptions>(options =>
+      {
+        options.AllowSynchronousIO = true;
+      });
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

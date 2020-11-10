@@ -10,5 +10,7 @@ namespace Cryptocop.Software.API.Models.Entities
     public string Country { get; set; }
     public string City { get; set; }
 
+    // Navigation properties
+    public User User { get; set; }
   }
 }

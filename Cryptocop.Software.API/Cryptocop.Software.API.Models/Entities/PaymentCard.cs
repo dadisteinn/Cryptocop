@@ -8,5 +8,8 @@ namespace Cryptocop.Software.API.Models.Entities
     public string CardNumber { get; set; }
     public int Month { get; set; }
     public int Year { get; set; }
+
+    // Navigation properties
+    public User User { get; set; }
   }
 }

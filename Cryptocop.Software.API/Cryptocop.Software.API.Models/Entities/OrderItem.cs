@@ -8,5 +8,8 @@ namespace Cryptocop.Software.API.Models.Entities
     public float Quantity { get; set; }
     public float UnitPrice { get; set; }
     public float TotalPrice { get; set; }
+
+    // Navigation properties
+    public Order Order { get; set; }
   }
 }
