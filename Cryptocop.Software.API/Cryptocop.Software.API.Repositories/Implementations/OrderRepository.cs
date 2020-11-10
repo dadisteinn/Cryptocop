@@ -6,6 +6,7 @@ using Cryptocop.Software.API.Models.Entities;
 using Cryptocop.Software.API.Models.Exceptions;
 using Cryptocop.Software.API.Models.InputModels;
 using Cryptocop.Software.API.Repositories.Contexts;
+using Cryptocop.Software.API.Repositories.Helpers;
 using Cryptocop.Software.API.Repositories.Interfaces;
 
 namespace Cryptocop.Software.API.Repositories.Implementations
@@ -43,7 +44,7 @@ namespace Cryptocop.Software.API.Repositories.Implementations
     {
       // Check if order exists
       var order = _dbContext.Orders.FirstOrDefault(o => o.Id == orderId);
-      if (order == null) { throw new ResourceNotFoundException("Order not found."); }
+      if (order == null) { throw new ResourceNotFoundException($"No order with id {orderId} was found."); }
 
       // Return all order items
       return _dbContext.OrderItems
@@ -82,13 +83,34 @@ namespace Cryptocop.Software.API.Repositories.Implementations
       var user = _dbContext.Users.FirstOrDefault(u => u.Email == email);
       if (user == null) { throw new ResourceMissingException("No user was found with this email."); }
 
-      // Get user address
-      var address = _dbContext.Addresses.FirstOrDefault(a => a.Id == order.AddressId);
-      if (address == null) { throw new ResourceMissingException("No address has been registered for this user."); }
+      // Get user address, throw exception if none is found
+      Address address;
+      if (order.AddressId != 0)
+      {
+        // Find given address
+        address = _dbContext.Addresses.FirstOrDefault(a => a.Id == order.AddressId);
+      }
+      else
+      {
+        // Find a address if none is given
+        address = _dbContext.Addresses.FirstOrDefault(a => a.UserId == user.Id);
+      }
+      if (address == null) { throw new ResourceNotFoundException($"No address with id {order.AddressId} was found."); }
 
-      // Get user card information
-      var paymentCard = _dbContext.PaymentCards.FirstOrDefault(c => c.Id == order.PaymentCardId);
-      if (paymentCard == null) { throw new ResourceMissingException("No Payment card has been registered for this user."); }
+      // Get user card information, throw exception if none is found
+      PaymentCard paymentCard;
+      if (order.PaymentCardId != 0)
+      {
+        // Find given payment card
+        paymentCard = _dbContext.PaymentCards.FirstOrDefault(c => c.Id == order.PaymentCardId);
+      }
+      else
+      {
+        // Find a payment if none is given
+        paymentCard = _dbContext.PaymentCards.FirstOrDefault(c => c.UserId == user.Id);
+      }
+      if (paymentCard == null) { throw new ResourceNotFoundException($"No payment card with id {order.PaymentCardId} was found."); }
+
 
       // Get user shoppingcart or create new cart if none exists
       var cart = _dbContext.ShoppingCarts.FirstOrDefault(c => c.UserId == user.Id);
@@ -115,7 +137,7 @@ namespace Cryptocop.Software.API.Repositories.Implementations
         totalPrice += item.TotalPrice;
       }
 
-      var maskedCardNumber = "************" + paymentCard.CardNumber.Substring(paymentCard.CardNumber.Length - 4);
+      var maskedCardNumber = PaymentCardHelper.MaskPaymentCard(paymentCard.CardNumber);
 
       // Create and save order
       var entity = new Order

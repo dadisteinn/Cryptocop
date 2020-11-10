@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Cryptocop.Software.API.Models.DTOs;
 using Cryptocop.Software.API.Models.Entities;
@@ -80,7 +79,7 @@ namespace Cryptocop.Software.API.Repositories.Implementations
         ShoppingCartId = cart.Id,
         ProductIdentifier = shoppingCartItemItem.ProductIdentifier,
         Quantity = quantity,
-        UnitPrice = priceInUsd / quantity
+        UnitPrice = priceInUsd
       };
 
       _dbContext.ShoppingCartItems.Add(entity);
@@ -95,7 +94,7 @@ namespace Cryptocop.Software.API.Repositories.Implementations
 
       // Get the item and 
       var cartItem = _dbContext.ShoppingCartItems.FirstOrDefault(i => i.Id == id);
-      if (cartItem == null) { throw new ResourceNotFoundException("This item is not present in the cart"); }
+      if (cartItem == null) { throw new ResourceNotFoundException($"No item with id {id} was found."); }
 
       _dbContext.ShoppingCartItems.Remove(cartItem);
       _dbContext.SaveChanges();
@@ -109,7 +108,7 @@ namespace Cryptocop.Software.API.Repositories.Implementations
 
       // Get the item and update it
       var cartItem = _dbContext.ShoppingCartItems.FirstOrDefault(i => i.Id == id);
-      if (cartItem == null) { throw new ResourceNotFoundException("This item is not present in the cart"); }
+      if (cartItem == null) { throw new ResourceNotFoundException($"No item with id {id} was found."); }
 
       cartItem.Quantity = quantity;
 

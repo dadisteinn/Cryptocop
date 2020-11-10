@@ -39,16 +39,5 @@ namespace Cryptocop.Software.API.Controllers
       _orderservice.CreateNewOrder(email, inputModel);
       return StatusCode(201);
     }
-
-    // TODO: remove this
-    [HttpPost]
-    [Route("test")]
-    public IActionResult publishIncomingDto([FromBody] OrderDto dtoModel)
-    {
-      if (!ModelState.IsValid) { throw new ModelFormatException("Order not properly formatted."); }
-
-      _orderservice.publishIncomingDto(dtoModel);
-      return Ok();
-    }
   }
 }

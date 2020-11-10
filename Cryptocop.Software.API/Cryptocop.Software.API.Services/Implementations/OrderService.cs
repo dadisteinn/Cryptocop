@@ -31,12 +31,6 @@ namespace Cryptocop.Software.API.Services.Implementations
     {
       var dto = _orderRepository.CreateNewOrder(email, order);
       _shoppingCartRepository.DeleteCart(email);
-      // TODO: Publish order
-      _queueService.PublishMessage(_routingKey, dto);
-    }
-    // TODO: remove this  
-    public void publishIncomingDto(OrderDto dto)
-    {
       _queueService.PublishMessage(_routingKey, dto);
     }
   }

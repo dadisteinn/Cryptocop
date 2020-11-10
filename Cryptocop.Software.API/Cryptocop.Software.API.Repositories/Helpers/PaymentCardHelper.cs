@@ -1,11 +1,10 @@
 ﻿namespace Cryptocop.Software.API.Repositories.Helpers
 {
-    public class PaymentCardHelper
+  public class PaymentCardHelper
+  {
+    public static string MaskPaymentCard(string paymentCardNumber)
     {
-        public static string MaskPaymentCard(string paymentCardNumber)
-        {
-            // TODO: Implement
-            return "";
-        }
+      return "************" + paymentCardNumber.Substring(paymentCardNumber.Length - 4); ;
     }
+  }
 }

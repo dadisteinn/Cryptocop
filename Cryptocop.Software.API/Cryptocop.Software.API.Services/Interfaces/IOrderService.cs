@@ -8,7 +8,5 @@ namespace Cryptocop.Software.API.Services.Interfaces
   {
     IEnumerable<OrderDto> GetOrders(string email);
     void CreateNewOrder(string email, OrderInputModel order);
-    // TODO: Remove this
-    void publishIncomingDto(OrderDto dto);
   }
 }

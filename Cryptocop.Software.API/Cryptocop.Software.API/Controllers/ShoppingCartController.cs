@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using Cryptocop.Software.API.Models.Exceptions;
 using Cryptocop.Software.API.Models.InputModels;
 using Cryptocop.Software.API.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace Cryptocop.Software.API.Controllers
 {
@@ -53,9 +55,18 @@ namespace Cryptocop.Software.API.Controllers
     [Route("{itemId:int}")]
     public IActionResult UpdateCartItem(int itemId)
     {
-      // Get user email from claims
-      var email = User.Claims.FirstOrDefault(c => c.Type == "name").Value;
-      _shoppingCartService.RemoveCartItem(email, itemId);
+      using (var reader = new StreamReader(Request.Body))
+      {
+        // Retrieve quantity from request body, throw exception if no quant
+        var body = reader.ReadToEnd();
+        var jsonObject = JObject.Parse(body);
+        if (jsonObject["quantity"] == null) { throw new ModelFormatException("Invalid quantity."); }
+        float.TryParse(jsonObject["quantity"].ToString(), out var quantity);
+
+        // Get user email from claims
+        var email = User.Claims.FirstOrDefault(c => c.Type == "name").Value;
+        _shoppingCartService.UpdateCartItemQuantity(email, itemId, quantity);
+      }
       return NoContent();
     }
 

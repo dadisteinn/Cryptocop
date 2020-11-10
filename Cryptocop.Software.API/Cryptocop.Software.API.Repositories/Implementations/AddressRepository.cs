@@ -63,7 +63,7 @@ namespace Cryptocop.Software.API.Repositories.Implementations
 
       // Get address or throw error if it doesnt exist
       var address = _dbContext.Addresses.FirstOrDefault(a => a.Id == addressId);
-      if (address == null) { throw new ResourceMissingException("No address has been registered for this user."); }
+      if (address == null) { throw new ResourceNotFoundException($"No address with id {addressId} was found."); }
 
       // Remove the address
       _dbContext.Addresses.Remove(address);
