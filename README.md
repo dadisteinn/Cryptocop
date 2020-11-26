@@ -16,7 +16,7 @@ A web API for cryptocurrency trade
 - [RabbitMQ] is the message broker used for communicaiton between services
 
 #### Email & Payment service
-Two services used, an email service for purchase confirmation and a payment service for creditcard validation. 
+Two services are used, an email service for purchase confirmation and a payment service for creditcard validation. 
 
 - Made using [Node.js]
 - [Mailgun] is used for automated emails
